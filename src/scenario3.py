@@ -3,8 +3,8 @@ from pyspark.sql import functions as F
 # Scenario 3: Data Validation Before Ingestion
 
 # 3 Hard Validations: Should block ingestion
-# 1. party_key should not be null
-# 2. source_updated_at should not be null
+# 1. party_key should not be NULL
+# 2. source_updated_at should not be NULL
 invalid_df = df.filter(
         F.col("party_key").isNull() |
         F.col("source_updated_at").isNull()
@@ -37,16 +37,16 @@ if df_with_duplicates.count() > 0:
 
 # 2 Soft Validations: Should only raise alerts
 
-# 1. More than 10% of `name` column should not be null
+# 1. More than 10% of `name` column should not be NULL
 total = df.count()
 null_pct = df.filter(F.col("name").isNull()).count() / total
 
 if null_pct > 0.1:
     null_percentage = null_pct * 100.0
-    print(f"ALERT -> High null percentage in name: {null_percentage}%")
+    print(f"ALERT -> High NULL percentage in name: {null_percentage}%")
 
 
-# 2. dob should not be null and be in valid Date format: yyyy-MM-dd
+# 2. dob should be of valid Date format: yyyy-MM-dd
 invalid_dob_df = df.filter(F.to_date(F.col("dob"), "yyyy-MM-dd").isNull())
 
 if invalid_dob_df.count() > 0:
